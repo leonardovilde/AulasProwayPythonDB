@@ -4,9 +4,9 @@ conexao = _sqlite3.connect("abobrinha.sqlite")
 cursor = conexao.cursor()
 
 
-comando = "SELECT name FROM sqlite_master WHERE type='table';"
+ListarTabelas = "SELECT name FROM sqlite_master WHERE type='table';"
 
-cursor.execute(comando)
+cursor.execute(ListarTabelas)
 
 tabelas = cursor.fetchall()
 

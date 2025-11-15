@@ -1,4 +1,5 @@
 from time import sleep
+import sqlite3
 
 
 def Animacao():
@@ -6,41 +7,65 @@ def Animacao():
             sleep(0.1)
             print("*")
 
+def ListarTabelas(cursor, conexao):
+     conexao = sqlite3.connect("abobrinha.sqlite")
+     cursor = conexao.cursor()
+
+     listarTabelas = "SELECT name FROM sqlite_master WHERE type='table';"
+
+     cursor.execute(listarTabelas)
+
+     tabelas = cursor.fetchall()
+
+     if tabelas:
+      for tabela in tabelas:
+        print("Tabela", tabela[0])
+
+     else: 
+      print("nenhuma Tabela encontrada no banco atual")
+     
+                 
+                
 
 def InteracaoBanco(nome, sobrenome, cursor, conexao):
  #bloco 06
         repeticao = True
 
-        while repeticao != False:
-            
-            novaTabela = int(input(f"{nome}{sobrenome},desja criar uma nova tabela\ndigite 1 para sim e 2 para nao"))
+        nomeTabela = input(f"informe o nome da tabela que deseja criar: ")
 
-            if novaTabela == 2:
-                repeticao = False
+        colunas = []
 
-            elif novaTabela == 1:
-                repeticao = True
+        for i in range(1, 3):
+            print(f"\n--- Coluna{i} ---")
+            nomecoluna = input(f"{nome}, informe o nome da coluna {i}: ")
 
-                nomeTabela = input(f"{nome}{sobrenome},informe o nome da tabela que deseja criar: ")
+            print("\n INTEGER\n TEXT\n REAL\n NUMERIC\n")
+            tipocoluna = input(f"{nome}, informe o tipo da coluna {i}: ")
 
-                comandoCriaTabela = f'''
-                CREATE TABLE IF NOT EXISTS {nomeTabela} (
-                    ID INTEGER,
-                    NOME TEXT NOT NULL
-                )
-                '''
+            print("\n NOT NULL\n NULL")
+            colunaVazio = input(f"{nome}, informe se a coluna poder ser nula ou não")
+
+            colunas.append(f"{nomecoluna} {tipocoluna} {colunaVazio}")
+
+            comandoCriaTabela = f"""
+            CREATE TABLE IF NOT EXISTS {nomeTabela} (
+                {',' .join(colunas)}
+            )
+            """
+
+
                 
 
-                cursor.execute(comandoCriaTabela)
-                conexao.commit()
+            cursor.execute(comandoCriaTabela)
+            conexao.commit()
 
                 
 
 
 
-                desejaDeletar = True
+            desejaDeletar = True
 
-                while desejaDeletar != False:
+            while desejaDeletar != False:
 
                     deleta = int(input(f"{nome}{sobrenome}, deseja deletar a tabela?\ndigite 1 para sim e 2 para nao: "))
 
@@ -65,4 +90,4 @@ def InteracaoBanco(nome, sobrenome, cursor, conexao):
 
             else:
                 repeticao = True
-                print(f"o numero {novaTabela} que voce digitou nao faz parte das informacoes fornecidas ")
+                print(f"o numero {nomeTabela} que voce digitou nao faz parte das informacoes fornecidas ")

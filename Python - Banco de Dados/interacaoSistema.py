@@ -1,4 +1,4 @@
-from crud import Animacao, InteracaoBanco
+from crud import Animacao, InteracaoBanco, ListarTabelas
 import _sqlite3
 
 def menu():
@@ -22,10 +22,10 @@ def menu():
         #bloco 05
         conexao = _sqlite3.connect("abobrinha.sqlite")
         cursor = conexao.cursor()
+
+        ListarTabelas(cursor, conexao)
+
         InteracaoBanco(nome, sobrenome, cursor, conexao)
-
-       
-
 
         continuaSistema = int(input(f"deseja continuar no sistema\ndigite 1 para sim e 2 para nao: "))
         
@@ -38,6 +38,8 @@ def menu():
         else:
             print(f"o numero {continuaSistema} que voce digitou nao faz parte das opcoes fornecidas: ")
             sistema = False
+
+
 
     #bloco07
     Animacao()
